@@ -167,6 +167,24 @@ export default function Nav({
                 </Link>
               );
             })}
+            {user ? (
+              <div
+                className="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium"
+                onClick={() => {
+                  signOut(auth);
+                }}
+              >
+                Sign Out
+              </div>
+            ) : (
+              <Link
+                href="/login"
+                className="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium"
+                aria-current={router.pathname == "/login" ? "page" : undefined}
+              >
+                Log In
+              </Link>
+            )}
           </div>
         </div>
       </nav>
