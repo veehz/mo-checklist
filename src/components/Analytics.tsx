@@ -4,10 +4,11 @@ export default function Analytics() {
   return (
     <>
       <Script
+        id="tag-manager"
         src="https://www.googletagmanager.com/gtag/js?id=G-VDMR617ED6"
         strategy="afterInteractive"
       ></Script>
-      <Script strategy="afterInteractive">
+      <Script id="run-tag-manager" strategy="afterInteractive">
         {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
