@@ -217,6 +217,48 @@ function getCompetitions(): Competition[] {
 
     array.push(apmo);
   })();
+
+  /** EGMO */
+  (function () {
+    const egmo: Competition = {
+      name: "European Girls' Mathematical Olympiad",
+      shortname: "EGMO",
+      url: "https://www.egmo.org/",
+      years: [],
+    };
+
+    const first = 2012;
+    for (let y = 2023; y >= first; y--) {
+      egmo.years.push({
+        year: y,
+        url: `https://www.egmo.org/egmos/egmo${y - first + 1}`,
+        links: {
+          "D1-PDF": `https://www.egmo.org/egmos/egmo${
+            y - first + 1
+          }/paper-day1-English.pdf`,
+          "D2-PDF": `https://www.egmo.org/egmos/egmo${
+            y - first + 1
+          }/paper-day2-English.pdf`,
+        },
+        problems: [1, 2, 3, 4, 5, 6].map((problem) => {
+          return {
+            index: problem,
+          };
+        }),
+      });
+    }
+
+    get(egmo.years, "year", 2012).problems.push({
+      index: 7,
+    })
+    get(egmo.years, "year", 2012).problems.push({
+      index: 8,
+    })
+
+    array.push(egmo);
+  })();
+
+  /** TOT */
   (function () {
     const tot: Competition = {
       name: "Tournament of Towns",
@@ -226,28 +268,62 @@ function getCompetitions(): Competition[] {
     };
 
     const first = 1980;
-    for (let i = 2023; i >= 2016; i--) {
+    for (let y = 2023; y >= 2016; y--) {
       tot.years.push({
-        name: `TOT Spring ${i}`,
-        year: i,
+        name: `TOT Spring ${y}`,
+        year: y,
         links: {
-          "O-PDF": `https://www.turgor.ru/en/problems/${i - first + 1}/spring-${i - first + 1}-O-eng-auth.pdf`,
-          "A-PDF": `https://www.turgor.ru/en/problems/${i - first + 1}/spring-${i - first + 1}-A-eng-auth.pdf`,
+          "O-PDF": `https://www.turgor.ru/en/problems/${y - first + 1}/spring-${
+            y - first + 1
+          }-O-eng-auth.pdf`,
+          "A-PDF": `https://www.turgor.ru/en/problems/${y - first + 1}/spring-${
+            y - first + 1
+          }-A-eng-auth.pdf`,
         },
-        problems: ["O1", "O2", "O3", "O4", "O5", "A1", "A2", "A3", "A4", "A5", "A6", "A7"].map((problem) => {
+        problems: [
+          "O1",
+          "O2",
+          "O3",
+          "O4",
+          "O5",
+          "A1",
+          "A2",
+          "A3",
+          "A4",
+          "A5",
+          "A6",
+          "A7",
+        ].map((problem) => {
           return {
             name: problem,
           };
         }),
       });
       tot.years.push({
-        name: `TOT Fall ${i-1}`,
-        year: i,
+        name: `TOT Fall ${y - 1}`,
+        year: y,
         links: {
-          "O-PDF": `https://www.turgor.ru/en/problems/${i - first + 1}/fall-${i - first + 1}-O-eng-auth.pdf`,
-          "A-PDF": `https://www.turgor.ru/en/problems/${i - first + 1}/fall-${i - first + 1}-A-eng-auth.pdf`,
+          "O-PDF": `https://www.turgor.ru/en/problems/${y - first + 1}/fall-${
+            y - first + 1
+          }-O-eng-auth.pdf`,
+          "A-PDF": `https://www.turgor.ru/en/problems/${y - first + 1}/fall-${
+            y - first + 1
+          }-A-eng-auth.pdf`,
         },
-        problems: ["O1", "O2", "O3", "O4", "O5", "A1", "A2", "A3", "A4", "A5", "A6", "A7"].map((problem) => {
+        problems: [
+          "O1",
+          "O2",
+          "O3",
+          "O4",
+          "O5",
+          "A1",
+          "A2",
+          "A3",
+          "A4",
+          "A5",
+          "A6",
+          "A7",
+        ].map((problem) => {
           return {
             name: problem,
           };
