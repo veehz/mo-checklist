@@ -89,6 +89,11 @@ export default function App() {
   const [user, setUser] = useState<User>();
   const [hiddenContests, setHiddenContests] = useState<string[]>([]);
 
+  const defaultShownYears = parseInt(
+    process.env.NEXT_PUBLIC_DEFAULT_SHOWN_YEARS || "15"
+  );
+  const [shownYears, setShownYears] = useState<number>(defaultShownYears);
+
   const [viewMode, setViewMode] = useState<boolean>(false);
   const [viewModeDisplayName, setViewModeDisplayName] =
     useState<string>("User");
@@ -98,17 +103,17 @@ export default function App() {
 
   const [originalData, setOriginalData] = useState<solvedStates>({});
 
-  function solvedAll(competition : Competition, year: CompetitionYear) {
+  function solvedAll(competition: Competition, year: CompetitionYear) {
     if (!year.problems.length) return false;
     let unsolved = false;
     for (const p of year.problems) {
-      if (!state[getId(competition, year, p)] || state[getId(competition, year, p)] != 2) {
+      if (
+        !state[getId(competition, year, p)] ||
+        state[getId(competition, year, p)] != 2
+      ) {
         unsolved = true;
         break;
       }
-    }
-    if(!unsolved){
-      console.log(year);
     }
     return !unsolved;
   }
@@ -141,6 +146,9 @@ export default function App() {
               if (snapshot.val().displayName)
                 setViewModeDisplayName(snapshot.val().displayName);
               else setViewModeDisplayName("User");
+              if (snapshot.val().shownYears)
+                setShownYears(snapshot.val().shownYears);
+              else setShownYears(defaultShownYears);
             }
           },
           {
@@ -169,16 +177,18 @@ export default function App() {
         );
       } else if (user) {
         setUser(user);
-
         setShareLink(`${origin}${router.basePath || "/"}?user=${user.uid}`);
 
         onValue(
-          ref(db, `profile/${user.uid}/hiddenContests`),
+          ref(db, `profile/${user.uid}`),
           (snapshot) => {
             if (snapshot.exists()) {
-              setHiddenContests(Object.keys(snapshot.val()));
-            } else {
-              setHiddenContests([]);
+              if (snapshot.val().hiddenContests)
+                setHiddenContests(Object.keys(snapshot.val().hiddenContests));
+              else setHiddenContests([]);
+              if (snapshot.val().shownYears)
+                setShownYears(snapshot.val().shownYears);
+              else setShownYears(defaultShownYears);
             }
           },
           {
@@ -216,6 +226,7 @@ export default function App() {
         setUser(undefined);
         setShareLink("");
         setHiddenContests([]);
+        setShownYears(defaultShownYears);
       }
     });
   }, [router]);
@@ -337,71 +348,99 @@ export default function App() {
               <div className="overflow-x-auto">
                 <table className="table-auto w-full">
                   <tbody>
-                    {competition.years.map((year) => (
-                      <tr
-                        key={
-                          year.name
-                            ? year.name
-                            : `${competition.shortname} ${year.year}`
-                        }
-                      >
-                        <td
-                          className={
-                            "cell" +
-                            (solvedAll(competition, year)
-                              ? ` ${solvedStatesColors[2]}`
-                              : ` bg-zinc-100`)
+                    {competition.years
+                      .filter((year) => {
+                        return (
+                          !year.year ||
+                          year.year > new Date().getFullYear() - shownYears
+                        );
+                      })
+                      .map((year) => (
+                        <tr
+                          key={
+                            year.name
+                              ? year.name
+                              : `${competition.shortname} ${year.year}`
                           }
                         >
-                          <Extlink href={year.url} target="_blank" className={year.url ? "text-blue-500 font-bold" : "font-bold"}>
-                            {year.name
-                              ? year.name
-                              : `${competition.shortname} ${year.year}`}
-                          </Extlink> {
-                            year.links ? (
-                              <>({
-                                Object.keys(year.links).map((link : string, index : number) => (
-                                  <span key={link}><Extlink href={year.links![link]} target="_blank" className="text-blue-500">
-                                    {link}
-                                  </Extlink>{index == Object.keys(year.links!).length - 1 ? "" : ", "}</span>
-                                ))
-                              })</>
-                            ) : null
-                          }
-                        </td>
-                        {year.problems.map((p) => (
                           <td
-                            id={getId(competition, year, p)}
-                            key={p.name || p.index}
                             className={
-                              "cell cell-problem" +
-                              (p.url ? " text-blue-500" : "") +
-                              " " +
-                              solvedStatesColors[
-                                state[getId(competition, year, p)] || 0
-                              ]
+                              "cell" +
+                              (solvedAll(competition, year)
+                                ? ` ${solvedStatesColors[2]}`
+                                : ` bg-zinc-100`)
                             }
-                            onClick={() => {
-                              if (!viewMode && user)
-                                dispatch({
-                                  type: "increment",
-                                  payload: getId(competition, year, p),
-                                });
-                            }}
                           >
                             <Extlink
-                              href={p.url}
+                              href={year.url}
                               target="_blank"
-                              onClick={(e: any) => {
-                                e.stopPropagation();
+                              className={
+                                year.url
+                                  ? "text-blue-500 font-bold"
+                                  : "font-bold"
+                              }
+                            >
+                              {year.name
+                                ? year.name
+                                : `${competition.shortname} ${year.year}`}
+                            </Extlink>{" "}
+                            {year.links ? (
+                              <>
+                                (
+                                {Object.keys(year.links).map(
+                                  (link: string, index: number) => (
+                                    <span key={link}>
+                                      <Extlink
+                                        href={year.links![link]}
+                                        target="_blank"
+                                        className="text-blue-500"
+                                      >
+                                        {link}
+                                      </Extlink>
+                                      {index ==
+                                      Object.keys(year.links!).length - 1
+                                        ? ""
+                                        : ", "}
+                                    </span>
+                                  )
+                                )}
+                                )
+                              </>
+                            ) : null}
+                          </td>
+                          {year.problems.map((p) => (
+                            <td
+                              id={getId(competition, year, p)}
+                              key={p.name || p.index}
+                              className={
+                                "cell cell-problem" +
+                                (p.url ? " text-blue-500" : "") +
+                                " " +
+                                solvedStatesColors[
+                                  state[getId(competition, year, p)] || 0
+                                ]
+                              }
+                              onClick={() => {
+                                if (!viewMode && user)
+                                  dispatch({
+                                    type: "increment",
+                                    payload: getId(competition, year, p),
+                                  });
                               }}
                             >
-                              {p.name ? p.name : `P${p.index}`}
-                            </Extlink>
-                          </td>
-                        ))}
-                      </tr>
-                    ))}
+                              <Extlink
+                                href={p.url}
+                                target="_blank"
+                                onClick={(e: any) => {
+                                  e.stopPropagation();
+                                }}
+                              >
+                                {p.name ? p.name : `P${p.index}`}
+                              </Extlink>
+                            </td>
+                          ))}
+                        </tr>
+                      ))}
                   </tbody>
                 </table>
               </div>

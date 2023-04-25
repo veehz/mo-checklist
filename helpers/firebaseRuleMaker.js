@@ -46,6 +46,11 @@ const rules = {
         ".write": self(),
         $contestId: { ".validate": "newData.isBoolean()" },
       },
+      shownYears: {
+        ".read": "true",
+        ".write": self(),
+        ".validate": "newData.isNumber() && newData.val() >= 0",
+      },
       $other: { ".validate": "false" },
     },
   },

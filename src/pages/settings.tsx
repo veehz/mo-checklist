@@ -28,6 +28,7 @@ function Linkmaybe({
 
 interface ProfileForm {
   name: string;
+  shownYears: number;
   competitions: string[];
 }
 
@@ -62,19 +63,26 @@ export default function App() {
       });
 
       const updates: {
-        [key: string]: string | boolean | null;
+        [key: string]: string | boolean | number | null;
       } = {};
 
       updates[`profile/${auth.currentUser!.uid}/displayName`] = data.name;
+      updates[`profile/${auth.currentUser!.uid}/shownYears`] = data.shownYears;
       for (const c of competitions) {
         if (data.competitions.includes(c.shortname)) {
-          if (originalData[c.shortname]) {
+          if (
+            !originalData.hiddenContests ||
+            originalData.hiddenContests[c.shortname]
+          ) {
             updates[
               `profile/${auth.currentUser!.uid}/hiddenContests/${c.shortname}`
             ] = null;
           }
         } else {
-          if (!originalData[c.shortname]) {
+          if (
+            !originalData.hiddenContests ||
+            !originalData.hiddenContests[c.shortname]
+          ) {
             updates[
               `profile/${auth.currentUser!.uid}/hiddenContests/${c.shortname}`
             ] = true;
@@ -83,11 +91,10 @@ export default function App() {
       }
 
       await update(ref(db), updates);
+      router.reload();
     } catch (e) {
       console.log(e);
     }
-
-    router.reload();
   };
 
   useEffect(() => {
@@ -99,18 +106,23 @@ export default function App() {
         setValue("name", user.displayName || "");
 
         onValue(
-          ref(db, "profile/" + user.uid + "/hiddenContests"),
+          ref(db, "profile/" + user.uid),
           (snapshot) => {
+            setOriginalData(snapshot.val() || {});
             if (!snapshot.exists()) return;
 
-            setOriginalData(snapshot.val() || {});
-            const shown = [];
-            for (const competition of competitions) {
-              if (!snapshot.val()[competition.shortname]) {
-                shown.push(competition.shortname);
+            if (snapshot.val().shownYears !== null)
+              setValue("shownYears", snapshot.val().shownYears);
+
+            if (snapshot.val().hiddenContests) {
+              const shown = [];
+              for (const competition of competitions) {
+                if (!snapshot.val().hiddenContests[competition.shortname]) {
+                  shown.push(competition.shortname);
+                }
               }
+              setValue("competitions", shown);
             }
-            setValue("competitions", shown);
           },
           {
             onlyOnce: true,
@@ -149,7 +161,7 @@ export default function App() {
 
   return (
     <main>
-      <Nav title="Settings"/>
+      <Nav title="Settings" />
       <div className="py-4 px-12">
         <h1 className="font-bold text-3xl text-center">Settings</h1>
       </div>
@@ -160,6 +172,11 @@ export default function App() {
       ) : (
         <div className="py-4 px-12">
           <h2 className="font-bold text-2xl text-center">Profile</h2>
+          <div className="text-sm">
+            {errors?.name?.message ||
+              errors?.shownYears?.message ||
+              errors?.competitions?.message}
+          </div>
           <div className="space-y-2 max-w-md mx-auto">
             <form className="mx-auto my-4" onSubmit={handleSubmit(onSubmit)}>
               <h3 className="font-bold text-xl text-center mt-4 mb-2">
@@ -173,6 +190,28 @@ export default function App() {
                   "rounded-md relative block w-full border-0 px-2 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 }
                 placeholder="Name"
+              />
+              <h3 className="font-bold text-xl text-center mt-4 mb-2">
+                Shown Years
+                <div className="text-sm">
+                  (Competitions before or during ({new Date().getFullYear()} - shownYears)
+                  will not be shown)
+                </div>
+              </h3>
+              <input
+                {...register("shownYears", {
+                  valueAsNumber: true,
+                  min: {
+                    value: 0,
+                    message: "Shown Years must be at least 0",
+                  },
+                })}
+                id="shownYears"
+                type="number"
+                className={
+                  "rounded-md relative block w-full border-0 px-2 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                }
+                placeholder={`Shown Years (Default = ${process.env.NEXT_PUBLIC_DEFAULT_SHOWN_YEARS || "15"})`}
               />
               <h3 className="font-bold text-xl text-center mt-4 mb-2">
                 My Competitions
