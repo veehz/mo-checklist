@@ -103,6 +103,32 @@ export default function App() {
 
   const [originalData, setOriginalData] = useState<solvedStates>({});
 
+  // Warn leaving page with unsaved changes (https://stackoverflow.com/a/65338027/6931684)
+  const [edited, setEdited] = useState<boolean>(false);
+  useEffect(() => {
+    const confirmationMessage =
+      "You have unsaved changes. Are you sure you want to leave?";
+    const beforeUnloadHandler = (e: BeforeUnloadEvent) => {
+      (e || window.event).returnValue = confirmationMessage;
+      return confirmationMessage; // Gecko + Webkit, Safari, Chrome etc.
+    };
+    const beforeRouteHandler = (url: string) => {
+      if (router.pathname !== url && !confirm(confirmationMessage)) {
+        router.events.emit("routeChangeError");
+        // tslint:disable-next-line: no-string-throw
+        throw `Route change to "${url}" was aborted (this error can be safely ignored). See https://github.com/vercel/next.js/discussions/32231.`;
+      }
+    };
+
+    if (edited) {
+      window.addEventListener("beforeunload", beforeUnloadHandler);
+      router.events.on("routeChangeStart", beforeRouteHandler);
+    } else {
+      window.removeEventListener("beforeunload", beforeUnloadHandler);
+      router.events.off("routeChangeStart", beforeRouteHandler);
+    }
+  }, [edited]);
+
   function solvedAll(competition: Competition, year: CompetitionYear) {
     if (!year.problems.length) return false;
     let unsolved = false;
@@ -421,11 +447,13 @@ export default function App() {
                                 ]
                               }
                               onClick={() => {
-                                if (!viewMode && user)
+                                if (!viewMode && user) {
+                                  setEdited(true);
                                   dispatch({
                                     type: "increment",
                                     payload: getId(competition, year, p),
                                   });
+                                }
                               }}
                             >
                               <Extlink
