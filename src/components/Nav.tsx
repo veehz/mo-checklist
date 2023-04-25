@@ -8,7 +8,9 @@ import Head from "next/head";
 import Analytics from "./Analytics";
 
 export default function Nav({
-  pages = [],
+  pages = [
+    ["Problems", "/"],
+  ],
   rightPages = [
     ["About", "/about"],
     ["Settings", "/settings"],
