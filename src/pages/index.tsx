@@ -20,15 +20,17 @@ function Extlink({
   children,
   target,
   onClick,
+  className,
 }: {
   href?: string;
   target?: string;
   onClick?: any;
+  className?: string;
   children: React.ReactNode;
 }) {
-  if (!href) return <>{children}</>;
+  if (!href) return <span className={className}>{children}</span>;
   return (
-    <a href={href} target={target} onClick={onClick}>
+    <a href={href} target={target} onClick={onClick} className={className}>
       {children}
     </a>
   );
@@ -96,14 +98,17 @@ export default function App() {
 
   const [originalData, setOriginalData] = useState<solvedStates>({});
 
-  function solvedAll(year: CompetitionYear) {
+  function solvedAll(competition : Competition, year: CompetitionYear) {
     if (!year.problems.length) return false;
     let unsolved = false;
     for (const p of year.problems) {
-      if (state[getId(competitions[0], year, p)] != 2) {
+      if (!state[getId(competition, year, p)] || state[getId(competition, year, p)] != 2) {
         unsolved = true;
         break;
       }
+    }
+    if(!unsolved){
+      console.log(year);
     }
     return !unsolved;
   }
@@ -342,18 +347,27 @@ export default function App() {
                       >
                         <td
                           className={
-                            "cell font-bold" +
-                            (year.url ? " text-blue-500" : "") +
-                            (solvedAll(year)
+                            "cell" +
+                            (solvedAll(competition, year)
                               ? ` ${solvedStatesColors[2]}`
                               : ` bg-zinc-100`)
                           }
                         >
-                          <Extlink href={year.url} target="_blank">
+                          <Extlink href={year.url} target="_blank" className={year.url ? "text-blue-500 font-bold" : "font-bold"}>
                             {year.name
                               ? year.name
                               : `${competition.shortname} ${year.year}`}
-                          </Extlink>
+                          </Extlink> {
+                            year.links ? (
+                              <>({
+                                Object.keys(year.links).map((link : string, index : number) => (
+                                  <span key={link}><Extlink href={year.links![link]} target="_blank" className="text-blue-500">
+                                    {link}
+                                  </Extlink>{index == Object.keys(year.links!).length - 1 ? "" : ", "}</span>
+                                ))
+                              })</>
+                            ) : null
+                          }
                         </td>
                         {year.problems.map((p) => (
                           <td

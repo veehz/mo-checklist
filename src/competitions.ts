@@ -8,7 +8,9 @@ export interface CompetitionYear {
   name?: string;
   year?: number;
   url?: string;
-  pdf?: string;
+  links?: {
+    [key: string]: string;
+  };
   problems: CompetitionProblem[];
 }
 
@@ -91,7 +93,10 @@ function getCompetitions(): Competition[] {
       for (let i = 0; i < 4; i++) {
         const cur: CompetitionYear = {
           name: `IMOSL ${year} (${topics[i]})`,
-          pdf: `https://www.imo-official.org/problems/IMO${year}SL.pdf`,
+          year: year,
+          links: {
+            PDF: `https://www.imo-official.org/problems/IMO${year}SL.pdf`,
+          },
           url: years[index].link,
           problems: [],
         };
@@ -106,6 +111,38 @@ function getCompetitions(): Competition[] {
     }
 
     array.push(imosl);
+  })();
+
+  /** APMO */
+  (function () {
+    const apmo : Competition = {
+      name: "Asian Pacific Mathematical Olympiad",
+      shortname: "APMO",
+      url: "https://www.apmo-official.org/",
+      years: [],
+    };
+
+    for (let y = 2022; y >= 1989; y--) {
+      apmo.years.push({
+        year: y,
+        url: `https://www.apmo-official.org/year_report/${y}`,
+        links: {
+          PDF: `https://www.apmo-official.org/static/problems/apmo${y}_prb.pdf`,
+          Sol: `https://www.apmo-official.org/static/solutions/apmo${y}_sol.pdf`
+        },
+        problems: [1,2,3,4,5].map((problem) => {
+          return {
+            index: problem,
+          };
+        }),
+      });
+    }
+
+    [2000, 1994, 1993, 1992, 1991, 1989].map((year) => {
+      delete get(apmo.years, "year", year).links.Sol
+    });
+
+    array.push(apmo);
   })();
 
   return array;
