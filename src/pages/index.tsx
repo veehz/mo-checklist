@@ -258,7 +258,7 @@ export default function App() {
     });
   }, [router, defaultShownYears]);
 
-  function saveData() {
+  async function saveData() {
     const updates: solvedStates = {};
     for (const [key, value] of Object.entries(solvedState)) {
       if (originalData[key] != value) {
@@ -266,7 +266,13 @@ export default function App() {
         updates[key] = value ? value : null;
       }
     }
-    update(ref(db, `solved/${user!.uid}`), updates);
+    try {
+      await update(ref(db, `solved/${user!.uid}`), updates);
+      setEdited(false);
+      setMessage("Saved!");
+    } catch (e) {
+      setMessage("Error saving!");
+    }
   }
 
   return (
@@ -408,8 +414,8 @@ export default function App() {
                               }
                             >
                               {year.name
-                                ? year.name
-                                : `${competition.shortname} ${year.year}`}
+                                ? `${year.name} ${year.description || ""}`
+                                : `${competition.shortname} ${year.year} ${year.description || ""}`}
                             </Extlink>{" "}
                             {year.links ? (
                               <>
