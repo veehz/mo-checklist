@@ -10,6 +10,8 @@ Problems and Contests are added in `/src/competitions.ts`.
 
 ## Deploy
 
+Edit the `.env.local.example` file and rename it to `.env.local`.
+
 ### Firebase
 
 #### Authentication
