@@ -258,6 +258,56 @@ function getCompetitions(): Competition[] {
     array.push(egmo);
   })();
 
+  /** RMM */
+  (function () {
+    const rmm: Competition = {
+      name: "Romanian Master of Mathematics",
+      shortname: "RMM",
+      url: "https://artofproblemsolving.com/community/c3238_romanian_masters_of_mathematics_collection",
+      years: [],
+    };
+
+    const first = 2008;
+    const links : [number, string][] = [
+      [2023, "https://artofproblemsolving.com/community/c3303738_2023_romanian_master_of_mathematics"],
+      [2021, "https://artofproblemsolving.com/community/c2510533_2021_romanian_masters_in_mathematics"],
+      [2020, "https://artofproblemsolving.com/community/c1085509_2020_romanian_masters_in_mathematics"],
+      [2019, "https://artofproblemsolving.com/community/c836819_2019_romanian_masters_in_mathematics"],
+      [2018, "https://artofproblemsolving.com/community/c618724_2018_romanian_masters_in_mathematics"],
+      [2017, "https://artofproblemsolving.com/community/c416676_2017_romanian_masters_in_mathematics"],
+      [2016, "https://artofproblemsolving.com/community/c254976_2016_romanian_masters_in_mathematic"],
+      [2015, "https://artofproblemsolving.com/community/c39512_2015_romania_masters_in_mathematics"],
+      [2013, "https://artofproblemsolving.com/community/c3612_2013_romanian_masters_in_mathematics"],
+      [2012, "https://artofproblemsolving.com/community/c3611_2012_romanian_masters_in_mathematics"],
+      [2011, "https://artofproblemsolving.com/community/c3610_2011_romanian_masters_in_mathematics"],
+      [2010, "https://artofproblemsolving.com/community/c3609_2010_romanian_masters_in_mathematics"],
+      [2009, "https://artofproblemsolving.com/community/c3608_2009_romanian_masters_in_mathematics"],
+      [2008, "https://artofproblemsolving.com/community/c3607_2008_romanian_masters_in_mathematics"],
+    ]
+
+    for (let i = 0; i < links.length; i++) {
+      const [y, url] = links[i];
+      rmm.years.push({
+        year: y,
+        url: url,
+        problems: [1, 2, 3, 4, 5, 6].map((problem) => {
+          return {
+            index: problem,
+          };
+        }
+        ),
+      });
+    }
+
+    get(rmm.years, "year", 2008).problems.pop();
+    get(rmm.years, "year", 2008).problems.pop();
+    get(rmm.years, "year", 2009).problems.pop();
+    get(rmm.years, "year", 2009).problems.pop();
+
+    array.push(rmm);
+  })();
+
+
   /** TOT */
   (function () {
     const tot: Competition = {
