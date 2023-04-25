@@ -307,7 +307,7 @@ export default function App() {
                 </Extlink>
               </h2>
               <div className="overflow-x-auto">
-                <table className="table-auto max-w-full">
+                <table className="table-auto w-full">
                   <tbody>
                     {competition.years.map((year) => (
                       <tr
