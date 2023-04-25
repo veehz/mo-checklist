@@ -6,10 +6,6 @@
     @apply py-2 px-4 border border-zinc-200
 }
 
-.cell-year {
-    @apply bg-zinc-100
-}
-
 .cell-problem {
-    @apply bg-zinc-50
+    @apply select-none text-center
 }

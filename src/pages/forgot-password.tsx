@@ -55,7 +55,7 @@ export default function ForgotPassword() {
 
   return (
     <div>
-      <Nav />
+      <Nav title="Forgot Password" />
       <div className="py-4 px-12">
         <h1 className="font-bold text-3xl text-center">Forgot Password</h1>
         <div className="max-w-md mx-auto">

@@ -3,14 +3,17 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../firebase";
+import BackToTop from "./BackToTop";
+import Head from "next/head";
 
 export default function Nav({
   pages = [],
-  rightPages = [],
+  rightPages = [["About", "/about"],["Settings", "/settings"]],
+  title,
 }: {
   pages?: Array<[string, string]>;
   rightPages?: Array<[string, string]>;
-  user?: string | null;
+  title?: string;
 }) {
   const router = useRouter();
   const [user, setUser] = useState<any>(null);
@@ -24,6 +27,11 @@ export default function Nav({
   const [menuOpen, setMenuOpen] = useState(false);
   return (
     <div>
+      <Head>
+        <title>{title ? title + " | MO Checklist" : "MO Checklist"}</title>
+      </Head>
+      <BackToTop />
+
       <nav className="bg-gray-800">
         <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
           <div className="relative flex h-16 items-center justify-between">

@@ -59,7 +59,7 @@ export default function Register() {
 
   return (
     <div>
-      <Nav />
+      <Nav title="Register"/>
       <div className="py-4 px-12">
         <h1 className="font-bold text-3xl text-center">Register</h1>
         <div className="max-w-md mx-auto">

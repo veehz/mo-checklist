@@ -63,7 +63,7 @@ export default function App() {
 
   return (
     <div>
-      <Nav />
+      <Nav title="Login"/>
       <div className="py-4 px-12">
         <h1 className="font-bold text-3xl text-center">Log In</h1>
         <div className="max-w-md mx-auto">
