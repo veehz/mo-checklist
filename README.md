@@ -1,6 +1,30 @@
 # MO Checklist (MOCk)
 
-This is a [Next.js](https://nextjs.org/) project.
+MO Checklist (MOCk) is a checklist for MOers to keep track of their progress in solving Mathematical Olympiad problems. Hope this will help you in your MO journey!
+
+## Features
+
+### Save Your Progress
+
+You can save your progress by logging in. For each question, you can mark it as solved, unsolved, or unattempted.
+
+![Screenshot of the main page](/demoassets/checklist.png)
+
+### Select Contests
+
+Only focus on the contests you want to practice on!
+
+### Shown Years
+
+Only see the most recent problems.
+
+![Screenshot of the settings page](/demoassets/settings.png)
+
+### Share Your Progress
+
+You can share your progress with others by sharing the link to your profile.
+
+![Screenshot of your shared profile](/demoassets/shared.png)
 
 ## Contribute
 
