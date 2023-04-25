@@ -57,7 +57,7 @@ function getId(
   year: CompetitionYear,
   problem: CompetitionProblem
 ): string {
-  return `${comp.shortname} ${year.name || year.year} ${
+  return `${year.name || `${comp.shortname} ${year.year}`} ${
     problem.name || problem.index
   }`;
 }
@@ -392,8 +392,8 @@ export default function App() {
                         <tr
                           key={
                             year.name
-                              ? year.name
-                              : `${competition.shortname} ${year.year}`
+                              ? `${year.name} ${year.description || ""}`
+                              : `${competition.shortname} ${year.year} ${year.description || ""}`
                           }
                         >
                           <td
