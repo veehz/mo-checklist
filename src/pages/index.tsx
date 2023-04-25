@@ -13,16 +13,25 @@ import { onValue, ref, update } from "firebase/database";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import Button from "@/components/Button";
+import { useRouter } from "next/router";
 
-function Linkmaybe({
+function Extlink({
   href,
   children,
+  target,
+  onClick,
 }: {
   href?: string;
+  target?: string;
+  onClick?: any;
   children: React.ReactNode;
 }) {
   if (!href) return <>{children}</>;
-  return <Link href={href}>{children}</Link>;
+  return (
+    <a href={href} target={target} onClick={onClick}>
+      {children}
+    </a>
+  );
 }
 
 interface solvedStates {
@@ -54,7 +63,7 @@ function getId(
 function reducer(
   state: solvedStates,
   action: {
-    type: "increment" | "set";
+    type: "increment" | "update" | "set";
     payload: any;
   }
 ): solvedStates {
@@ -63,11 +72,13 @@ function reducer(
     if (!state[action.payload]) state[action.payload] = 0;
     return { ...state, [action.payload]: (state[action.payload]! + 1) % len };
   }
+  if (action.type == "update")
+    return {
+      ...state,
+      ...action.payload,
+    };
 
-  return {
-    ...state,
-    ...action.payload,
-  };
+  return action.payload;
 }
 
 export default function App() {
@@ -75,7 +86,12 @@ export default function App() {
 
   const [user, setUser] = useState<User>();
   const [hiddenContests, setHiddenContests] = useState<string[]>([]);
-  const [loaded, setLoaded] = useState<boolean>(false);
+
+  const [viewMode, setViewMode] = useState<boolean>(false);
+  const [viewModeDisplayName, setViewModeDisplayName] = useState<string>("");
+
+  const [shareLink, setShareLink] = useState<string>("");
+  const [message, setMessage] = useState<string>("");
 
   const [originalData, setOriginalData] = useState<solvedStates>({});
 
@@ -91,12 +107,57 @@ export default function App() {
     return !unsolved;
   }
 
+  const router = useRouter();
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
-      if (loaded) return;
-      if (user) {
+      console.log("run");
+
+      const origin =
+        typeof window !== "undefined" && window.location.origin
+          ? window.location.origin
+          : "";
+
+      if (router.query.user) {
+        // setLoaded(true);
+        setViewMode(true);
+
+        setShareLink(
+          `${origin}${router.basePath || "/"}?user=${router.query.user}`
+        );
+
+        onValue(
+          ref(db, `profile/${router.query!.user}`),
+          (snapshot) => {
+            if (snapshot.exists()) {
+              if (snapshot.val().hiddenContests)
+                setHiddenContests(Object.keys(snapshot.val().hiddenContests));
+              if (snapshot.val().displayName)
+                setViewModeDisplayName(snapshot.val().displayName);
+            }
+          },
+          {
+            onlyOnce: true,
+          }
+        );
+
+        onValue(
+          ref(db, `solved/${router.query!.user}`),
+          (snapshot) => {
+            if (snapshot.exists()) {
+              dispatch({
+                type: "set",
+                payload: snapshot.val(),
+              });
+            }
+          },
+          {
+            onlyOnce: true,
+          }
+        );
+      } else if (user) {
         setUser(user);
-        setLoaded(true);
+
+        setShareLink(`${origin}${router.basePath || "/"}?user=${user.uid}`);
 
         onValue(
           ref(db, `profile/${user.uid}/hiddenContests`),
@@ -127,7 +188,7 @@ export default function App() {
         );
       }
     });
-  }, []);
+  }, [router]);
 
   function saveData() {
     const updates: solvedStates = {};
@@ -145,10 +206,15 @@ export default function App() {
       <Nav />
       <div className="py-4 px-4 sm:px-10 md:px-20">
         <h1 className="font-bold text-3xl text-center">
-          {user?.displayName
+          {viewMode
+            ? viewModeDisplayName
+              ? `Viewing ${viewModeDisplayName}'s Checklist`
+              : `Viewing User's Checklist`
+            : user?.displayName
             ? `${user!.displayName}'s Checklist`
             : `My Checklist`}
         </h1>
+        <div className="text-center">{message}</div>
         <div className="flex flex-col-reverse sm:flex-row-reverse mt-4">
           {/* <Menu as="div" className="relative inline-block float-right"> */}
           <Menu as="div" className="relative inline-block mx-2 my-1 sm:my-0">
@@ -188,14 +254,36 @@ export default function App() {
               </Menu.Items>
             </Transition>
           </Menu>
-          {user ? (
+          {user && !viewMode ? (
             <Button
               onClick={() => {
                 saveData();
               }}
               className="bg-green-600 mx-2 my-1 sm:my-0"
             >
-              <div className="px-8">Save</div>
+              <div className="px-2 sm:px-8">Save</div>
+            </Button>
+          ) : null}
+          {viewMode ? (
+            <Button
+              className="bg-blue-600 mx-2 my-1 sm:my-0"
+              onClick={() => {
+                router.push("/");
+                setViewMode(false);
+              }}
+            >
+              <div className="px-2 sm:px-8">Go Back to My Checklist</div>
+            </Button>
+          ) : null}
+          {shareLink ? (
+            <Button
+              onClick={() => {
+                navigator.clipboard.writeText(shareLink);
+                setMessage("Copied to clipboard!");
+              }}
+              className="bg-blue-600 mx-2 my-1 sm:my-0"
+            >
+              <div className="px-2 sm:px-8">Copy Sharable Link</div>
             </Button>
           ) : null}
         </div>
@@ -211,7 +299,9 @@ export default function App() {
                 }
                 id={competition.shortname.toLowerCase()}
               >
-                <Linkmaybe href={competition.url}>{competition.name}</Linkmaybe>
+                <Extlink href={competition.url} target="_blank">
+                  {competition.name}
+                </Extlink>
               </h2>
               <table className="table-auto w-full">
                 <tbody>
@@ -232,11 +322,11 @@ export default function App() {
                             : ` bg-zinc-100`)
                         }
                       >
-                        <Linkmaybe href={year.url}>
+                        <Extlink href={year.url} target="_blank">
                           {year.name
                             ? year.name
                             : `${competition.shortname} ${year.year}`}
-                        </Linkmaybe>
+                        </Extlink>
                       </td>
                       {year.problems.map((p) => (
                         <td
@@ -251,15 +341,22 @@ export default function App() {
                             ]
                           }
                           onClick={() => {
-                            dispatch({
-                              type: "increment",
-                              payload: getId(competition, year, p),
-                            });
+                            if (!viewMode)
+                              dispatch({
+                                type: "increment",
+                                payload: getId(competition, year, p),
+                              });
                           }}
                         >
-                          <Linkmaybe href={p.url}>
+                          <Extlink
+                            href={p.url}
+                            target="_blank"
+                            onClick={(e: any) => {
+                              e.stopPropagation();
+                            }}
+                          >
                             {p.name ? p.name : `P${p.index}`}
-                          </Linkmaybe>
+                          </Extlink>
                         </td>
                       ))}
                     </tr>

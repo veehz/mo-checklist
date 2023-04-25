@@ -93,8 +93,7 @@ export default function App() {
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        if (inputLoaded) return;
-        setInputLoaded(true);
+        console.log("run");
         setUser(user);
 
         setValue("name", user.displayName || "");
@@ -119,7 +118,7 @@ export default function App() {
         );
       }
     });
-  }, []);
+  }, [setValue]);
 
   const [pwmsg, setPwmsg] = useState<string | null>(null);
 

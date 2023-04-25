@@ -6,7 +6,6 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { auth } from "@/firebase";
-import "firebaseui/dist/firebaseui.css";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Link from "next/link";
 import Button from "@/components/Button";
