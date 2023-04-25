@@ -21,7 +21,7 @@ export default function Register() {
   const router = useRouter();
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
-      if (user) router.push("/");
+      if (user) router.push("/about");
     });
   }, [router]);
 
