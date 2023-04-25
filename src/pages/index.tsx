@@ -287,7 +287,7 @@ export default function App() {
             : `My Checklist`}
         </h1>
         <div className="text-center mt-2">
-          {user ? null : <div>Sign in to save your progress!</div>}
+          {user ? null : <div><Link href="/login" className="text-blue-500">Sign in</Link> to save your progress on each question!</div>}
           <div>{message}</div>
         </div>
         <div className="flex flex-col-reverse sm:flex-row-reverse mt-4">

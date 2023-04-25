@@ -43,7 +43,7 @@ export default function App() {
 
         <Section title="How do I use this?">
           <div>
-            You may click on the boxes to mark a problem as unsolved (
+            You may <span className="font-bold">click on the boxes</span> to mark a problem as unattempted (
             <span className="bg-zinc-50">gray</span>), solving (
             <span className="bg-yellow-100">yellow</span>), or solved (
             <span className="bg-green-100">green</span>). You may also click on
