@@ -88,7 +88,8 @@ export default function App() {
   const [hiddenContests, setHiddenContests] = useState<string[]>([]);
 
   const [viewMode, setViewMode] = useState<boolean>(false);
-  const [viewModeDisplayName, setViewModeDisplayName] = useState<string>("");
+  const [viewModeDisplayName, setViewModeDisplayName] =
+    useState<string>("User");
 
   const [shareLink, setShareLink] = useState<string>("");
   const [message, setMessage] = useState<string>("");
@@ -131,8 +132,10 @@ export default function App() {
             if (snapshot.exists()) {
               if (snapshot.val().hiddenContests)
                 setHiddenContests(Object.keys(snapshot.val().hiddenContests));
+              else setHiddenContests([]);
               if (snapshot.val().displayName)
                 setViewModeDisplayName(snapshot.val().displayName);
+              else setViewModeDisplayName("User");
             }
           },
           {
@@ -147,6 +150,11 @@ export default function App() {
               dispatch({
                 type: "set",
                 payload: snapshot.val(),
+              });
+            } else {
+              dispatch({
+                type: "set",
+                payload: {},
               });
             }
           },
@@ -164,6 +172,8 @@ export default function App() {
           (snapshot) => {
             if (snapshot.exists()) {
               setHiddenContests(Object.keys(snapshot.val()));
+            } else {
+              setHiddenContests([]);
             }
           },
           {
@@ -180,12 +190,27 @@ export default function App() {
                 type: "set",
                 payload: snapshot.val(),
               });
+            } else {
+              setOriginalData({});
+              dispatch({
+                type: "set",
+                payload: {},
+              });
             }
           },
           {
             onlyOnce: true,
           }
         );
+      } else {
+        setOriginalData({});
+        dispatch({
+          type: "set",
+          payload: {},
+        });
+        setUser(undefined);
+        setShareLink("");
+        setHiddenContests([]);
       }
     });
   }, [router]);
@@ -207,9 +232,7 @@ export default function App() {
       <div className="py-4 px-4 sm:px-10 md:px-20">
         <h1 className="font-bold text-3xl text-center">
           {viewMode
-            ? viewModeDisplayName
-              ? `Viewing ${viewModeDisplayName}'s Checklist`
-              : `Viewing User's Checklist`
+            ? `Viewing ${viewModeDisplayName}'s Checklist`
             : user?.displayName
             ? `${user!.displayName}'s Checklist`
             : `My Checklist`}
