@@ -6,6 +6,7 @@ export interface CompetitionProblem {
 
 export interface CompetitionYear {
   name?: string;
+  description?: string; // not included in unique id to be stored on firebase
   year?: number;
   url?: string;
   links?: {
@@ -28,6 +29,21 @@ function get(array: any[], key: string, name: any): any {
     }
   }
   return null;
+}
+
+function ordinalNumber(i: number): string {
+  const j = i % 10;
+  const k = i % 100;
+  if (j == 1 && k != 11) {
+    return i + "st";
+  }
+  if (j == 2 && k != 12) {
+    return i + "nd";
+  }
+  if (j == 3 && k != 13) {
+    return i + "rd";
+  }
+  return i + "th";
 }
 
 /** Main Function. Returns an array of Competition. */
@@ -148,7 +164,8 @@ function getCompetitions(): Competition[] {
       const year = years[index].year;
       for (let i = 0; i < 4; i++) {
         const cur: CompetitionYear = {
-          name: `IMOSL ${year} (${topics[i]})`,
+          name: `IMOSL ${year}`,
+          description: `(${topics[i]})`,
           year: year,
           links: {
             PDF: `https://www.imo-official.org/problems/IMO${year}SL.pdf`,
@@ -200,7 +217,46 @@ function getCompetitions(): Competition[] {
 
     array.push(apmo);
   })();
+  (function () {
+    const tot: Competition = {
+      name: "Tournament of Towns",
+      shortname: "TOT",
+      url: "https://www.turgor.ru/en",
+      years: [],
+    };
 
+    const first = 1980;
+    for (let i = 2023; i >= 2016; i--) {
+      tot.years.push({
+        name: `TOT Spring ${i}`,
+        year: i,
+        links: {
+          "O-PDF": `https://www.turgor.ru/en/problems/${i - first + 1}/spring-${i - first + 1}-O-eng-auth.pdf`,
+          "A-PDF": `https://www.turgor.ru/en/problems/${i - first + 1}/spring-${i - first + 1}-A-eng-auth.pdf`,
+        },
+        problems: ["O1", "O2", "O3", "O4", "O5", "A1", "A2", "A3", "A4", "A5", "A6", "A7"].map((problem) => {
+          return {
+            name: problem,
+          };
+        }),
+      });
+      tot.years.push({
+        name: `TOT Fall ${i-1}`,
+        year: i,
+        links: {
+          "O-PDF": `https://www.turgor.ru/en/problems/${i - first + 1}/fall-${i - first + 1}-O-eng-auth.pdf`,
+          "A-PDF": `https://www.turgor.ru/en/problems/${i - first + 1}/fall-${i - first + 1}-A-eng-auth.pdf`,
+        },
+        problems: ["O1", "O2", "O3", "O4", "O5", "A1", "A2", "A3", "A4", "A5", "A6", "A7"].map((problem) => {
+          return {
+            name: problem,
+          };
+        }),
+      });
+    }
+
+    array.push(tot);
+  })();
   return array;
 }
 
