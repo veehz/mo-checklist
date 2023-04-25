@@ -46,7 +46,7 @@ export default function App() {
         </div>
 
         <Section title="What is this?">
-          This is a checklist for MOers to keep track of their progress in
+          MO Checklist (MOCk) is a checklist for MOers to keep track of their progress in
           solving Mathematical Olympiad problems. Hope this will help you in
           your MO journey!
         </Section>

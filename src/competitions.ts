@@ -28,6 +28,7 @@ function get(array: any[], key: string, name: any): any {
   return null;
 }
 
+/** Main Function. Returns an array of Competition. */
 function getCompetitions(): Competition[] {
   const array = [];
 
