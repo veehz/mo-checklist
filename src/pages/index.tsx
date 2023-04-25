@@ -84,7 +84,9 @@ function reducer(
 }
 
 export default function App() {
-  const [state, dispatch] = useReducer(reducer, {});
+  const router = useRouter();
+
+  const [solvedState, dispatch] = useReducer(reducer, {});
 
   const [user, setUser] = useState<User>();
   const [hiddenContests, setHiddenContests] = useState<string[]>([]);
@@ -127,15 +129,15 @@ export default function App() {
       window.removeEventListener("beforeunload", beforeUnloadHandler);
       router.events.off("routeChangeStart", beforeRouteHandler);
     }
-  }, [edited]);
+  }, [edited, router]);
 
   function solvedAll(competition: Competition, year: CompetitionYear) {
     if (!year.problems.length) return false;
     let unsolved = false;
     for (const p of year.problems) {
       if (
-        !state[getId(competition, year, p)] ||
-        state[getId(competition, year, p)] != 2
+        !solvedState[getId(competition, year, p)] ||
+        solvedState[getId(competition, year, p)] != 2
       ) {
         unsolved = true;
         break;
@@ -144,7 +146,6 @@ export default function App() {
     return !unsolved;
   }
 
-  const router = useRouter();
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       console.log("run");
@@ -255,11 +256,11 @@ export default function App() {
         setShownYears(defaultShownYears);
       }
     });
-  }, [router]);
+  }, [router, defaultShownYears]);
 
   function saveData() {
     const updates: solvedStates = {};
-    for (const [key, value] of Object.entries(state)) {
+    for (const [key, value] of Object.entries(solvedState)) {
       if (originalData[key] != value) {
         if (!originalData[key] && value == 0) continue;
         updates[key] = value ? value : null;
@@ -443,7 +444,7 @@ export default function App() {
                                 (p.url ? " text-blue-500" : "") +
                                 " " +
                                 solvedStatesColors[
-                                  state[getId(competition, year, p)] || 0
+                                  solvedState[getId(competition, year, p)] || 0
                                 ]
                               }
                               onClick={() => {
