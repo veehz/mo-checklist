@@ -214,7 +214,10 @@ export default function App() {
             ? `${user!.displayName}'s Checklist`
             : `My Checklist`}
         </h1>
-        <div className="text-center">{message}</div>
+        <div className="text-center mt-2">
+          {user ? null : <div>Sign in to save your progress!</div>}
+          <div>{message}</div>
+        </div>
         <div className="flex flex-col-reverse sm:flex-row-reverse mt-4">
           {/* <Menu as="div" className="relative inline-block float-right"> */}
           <Menu as="div" className="relative inline-block mx-2 my-1 sm:my-0">
@@ -341,7 +344,7 @@ export default function App() {
                             ]
                           }
                           onClick={() => {
-                            if (!viewMode)
+                            if (!viewMode && user)
                               dispatch({
                                 type: "increment",
                                 payload: getId(competition, year, p),
