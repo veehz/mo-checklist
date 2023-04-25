@@ -41,7 +41,7 @@ interface NewPasswordForm {
 export default function App() {
   const router = useRouter();
   const [user, setUser] = useState<any>(null);
-  const [inputLoaded, setInputLoaded] = useState<boolean>(false);
+  const [message, setMessage] = useState<string | null>(null);
 
   const [originalData, setOriginalData] = useState<any>({});
 
@@ -67,7 +67,8 @@ export default function App() {
       } = {};
 
       updates[`profile/${auth.currentUser!.uid}/displayName`] = data.name;
-      updates[`profile/${auth.currentUser!.uid}/shownYears`] = data.shownYears;
+      if(Number.isNaN(data.shownYears)) updates[`profile/${auth.currentUser!.uid}/shownYears`] = null;
+      else updates[`profile/${auth.currentUser!.uid}/shownYears`] = data.shownYears;
       for (const c of competitions) {
         if (data.competitions.includes(c.shortname)) {
           if (
@@ -94,6 +95,7 @@ export default function App() {
       router.reload();
     } catch (e) {
       console.log(e);
+      setMessage("An error occurred. Please try again.");
     }
   };
 
@@ -170,7 +172,10 @@ export default function App() {
           You must be logged in to view this page.
         </div>
       ) : (
-        <div className="py-4 px-12">
+        <div className="pb-4 pt-2 px-12">
+          {message ? <div className="pb-4 text-center">
+            {message}
+          </div> : null}
           <h2 className="font-bold text-2xl text-center">Profile</h2>
           <div className="text-sm">
             {errors?.name?.message ||
@@ -194,8 +199,8 @@ export default function App() {
               <h3 className="font-bold text-xl text-center mt-4 mb-2">
                 Shown Years
                 <div className="text-sm">
-                  (Competitions before or during ({new Date().getFullYear()} - shownYears)
-                  will not be shown)
+                  (Competitions before or during ({new Date().getFullYear()} -
+                  shownYears) will not be shown)
                 </div>
               </h3>
               <input
@@ -211,7 +216,9 @@ export default function App() {
                 className={
                   "rounded-md relative block w-full border-0 px-2 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 }
-                placeholder={`Shown Years (Default = ${process.env.NEXT_PUBLIC_DEFAULT_SHOWN_YEARS || "15"})`}
+                placeholder={`Shown Years (Default = ${
+                  process.env.NEXT_PUBLIC_DEFAULT_SHOWN_YEARS || "15"
+                })`}
               />
               <h3 className="font-bold text-xl text-center mt-4 mb-2">
                 My Competitions
