@@ -306,66 +306,68 @@ export default function App() {
                   {competition.name}
                 </Extlink>
               </h2>
-              <table className="table-auto w-full">
-                <tbody>
-                  {competition.years.map((year) => (
-                    <tr
-                      key={
-                        year.name
-                          ? year.name
-                          : `${competition.shortname} ${year.year}`
-                      }
-                    >
-                      <td
-                        className={
-                          "cell font-bold" +
-                          (year.url ? " text-blue-500" : "") +
-                          (solvedAll(year)
-                            ? ` ${solvedStatesColors[2]}`
-                            : ` bg-zinc-100`)
+              <div className="overflow-x-auto">
+                <table className="table-auto max-w-full">
+                  <tbody>
+                    {competition.years.map((year) => (
+                      <tr
+                        key={
+                          year.name
+                            ? year.name
+                            : `${competition.shortname} ${year.year}`
                         }
                       >
-                        <Extlink href={year.url} target="_blank">
-                          {year.name
-                            ? year.name
-                            : `${competition.shortname} ${year.year}`}
-                        </Extlink>
-                      </td>
-                      {year.problems.map((p) => (
                         <td
-                          id={getId(competition, year, p)}
-                          key={p.name || p.index}
                           className={
-                            "cell cell-problem" +
-                            (p.url ? " text-blue-500" : "") +
-                            " " +
-                            solvedStatesColors[
-                              state[getId(competition, year, p)] || 0
-                            ]
+                            "cell font-bold" +
+                            (year.url ? " text-blue-500" : "") +
+                            (solvedAll(year)
+                              ? ` ${solvedStatesColors[2]}`
+                              : ` bg-zinc-100`)
                           }
-                          onClick={() => {
-                            if (!viewMode && user)
-                              dispatch({
-                                type: "increment",
-                                payload: getId(competition, year, p),
-                              });
-                          }}
                         >
-                          <Extlink
-                            href={p.url}
-                            target="_blank"
-                            onClick={(e: any) => {
-                              e.stopPropagation();
-                            }}
-                          >
-                            {p.name ? p.name : `P${p.index}`}
+                          <Extlink href={year.url} target="_blank">
+                            {year.name
+                              ? year.name
+                              : `${competition.shortname} ${year.year}`}
                           </Extlink>
                         </td>
-                      ))}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+                        {year.problems.map((p) => (
+                          <td
+                            id={getId(competition, year, p)}
+                            key={p.name || p.index}
+                            className={
+                              "cell cell-problem" +
+                              (p.url ? " text-blue-500" : "") +
+                              " " +
+                              solvedStatesColors[
+                                state[getId(competition, year, p)] || 0
+                              ]
+                            }
+                            onClick={() => {
+                              if (!viewMode && user)
+                                dispatch({
+                                  type: "increment",
+                                  payload: getId(competition, year, p),
+                                });
+                            }}
+                          >
+                            <Extlink
+                              href={p.url}
+                              target="_blank"
+                              onClick={(e: any) => {
+                                e.stopPropagation();
+                              }}
+                            >
+                              {p.name ? p.name : `P${p.index}`}
+                            </Extlink>
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           ))}
       </div>
