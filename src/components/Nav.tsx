@@ -9,7 +9,10 @@ import Analytics from "./Analytics";
 
 export default function Nav({
   pages = [],
-  rightPages = [["About", "/about"],["Settings", "/settings"]],
+  rightPages = [
+    ["About", "/about"],
+    ["Settings", "/settings"],
+  ],
   title,
 }: {
   pages?: Array<[string, string]>;
@@ -24,6 +27,12 @@ export default function Nav({
       setUser(user);
     });
   }, []);
+
+  function runSignOut() {
+    signOut(auth).then(() => {
+      router.reload();
+    });
+  }
 
   const [menuOpen, setMenuOpen] = useState(false);
   return (
@@ -131,7 +140,7 @@ export default function Nav({
                     <div
                       className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium ml-2"
                       onClick={() => {
-                        signOut(auth);
+                        runSignOut();
                       }}
                     >
                       Sign Out
@@ -182,7 +191,7 @@ export default function Nav({
               <div
                 className="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium"
                 onClick={() => {
-                  signOut(auth);
+                  runSignOut();
                 }}
               >
                 Sign Out
