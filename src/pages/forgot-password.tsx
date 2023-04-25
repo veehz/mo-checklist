@@ -21,7 +21,9 @@ export default function ForgotPassword() {
   }, [router]);
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
   const [errorMsg, setErrorMsg] = useState<string>("");
+  const [message, setMessage] = useState<string>("");
 
   const {
     register,
@@ -34,6 +36,7 @@ export default function ForgotPassword() {
     sendPasswordResetEmail(auth, data.email)
       .then(() => {
         setIsLoading(false);
+        setMessage("Password reset email sent.");
       })
       .catch((error) => {
         setIsLoading(false);
@@ -58,6 +61,9 @@ export default function ForgotPassword() {
       <Nav title="Forgot Password" />
       <div className="py-4 px-12">
         <h1 className="font-bold text-3xl text-center">Forgot Password</h1>
+        <div>
+          {message ? <div className="pb-4 text-center">{message}</div> : null}
+        </div>
         <div className="max-w-md mx-auto">
           <form
             className="mt-8 space-y-6"
