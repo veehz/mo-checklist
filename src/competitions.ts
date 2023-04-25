@@ -64,6 +64,12 @@ function getCompetitions(): Competition[] {
   /** IMOSL */
   (function () {
     // number of problems (A,C,G,N)
+    // 2012 or onwards use:
+    /* arr = [];
+      for(const topic of ["A", "C", "G", "N"]){
+          arr.push(Array.from(document.getElementsByClassName("cmty-view-post-item-label")).map(x => x.innerText).filter(x => x.startsWith(topic)).length);
+      }
+      JSON.stringify({year: parseInt(document.getElementsByClassName("cmty-category-cell-title")[0].innerHTML.trim().split(" ")[0]), link: window.location.href, num: arr}) */
     const years = [
       {
         year: 2021,
@@ -79,6 +85,56 @@ function getCompetitions(): Competition[] {
         year: 2019,
         link: "https://artofproblemsolving.com/community/c1308102_2019_isl",
         num: [7, 9, 8, 8],
+      },
+      {
+        year: 2018,
+        link: "https://artofproblemsolving.com/community/c915701_2018_imo_shortlist",
+        num: [7, 7, 7, 7],
+      },
+      {
+        year: 2017,
+        link: "https://artofproblemsolving.com/community/c686986_2017_imo_shortiist",
+        num: [8, 8, 8, 8],
+      },
+      {
+        year: 2016,
+        link: "https://artofproblemsolving.com/community/c482986_2016_imo_shortlist",
+        num: [8, 8, 8, 8],
+      },
+      {
+        year: 2015,
+        link: "https://artofproblemsolving.com/community/c111148_2015_imo_shortlist",
+        num: [6, 7, 8, 8],
+      },
+      {
+        year: 2014,
+        link: "https://artofproblemsolving.com/community/c107000_2014_imo_shortlist",
+        num: [6, 9, 7, 8],
+      },
+      {
+        year: 2013,
+        link: "https://artofproblemsolving.com/community/c3964_2013_imo_shortlist",
+        num: [6, 8, 6, 7],
+      },
+      {
+        year: 2012,
+        link: "https://artofproblemsolving.com/community/c3963_2012_imo_shortlist",
+        num: [7, 7, 8, 8],
+      },
+      {
+        year: 2011,
+        link: "https://artofproblemsolving.com/community/c3962_2011_imo_shortlist",
+        num: [7, 7, 8, 8],
+      },
+      {
+        year: 2010,
+        link: "https://artofproblemsolving.com/community/c3961_2010_imo_shortlist",
+        num: [8, 7, 7, 6],
+      },
+      {
+        year: 2009,
+        link: "https://artofproblemsolving.com/community/c3960_2009_imo_shortlist",
+        num: [7, 8, 8, 7],
       },
     ];
     const imosl: Competition = {
@@ -115,7 +171,7 @@ function getCompetitions(): Competition[] {
 
   /** APMO */
   (function () {
-    const apmo : Competition = {
+    const apmo: Competition = {
       name: "Asian Pacific Mathematical Olympiad",
       shortname: "APMO",
       url: "https://www.apmo-official.org/",
@@ -128,9 +184,9 @@ function getCompetitions(): Competition[] {
         url: `https://www.apmo-official.org/year_report/${y}`,
         links: {
           PDF: `https://www.apmo-official.org/static/problems/apmo${y}_prb.pdf`,
-          Sol: `https://www.apmo-official.org/static/solutions/apmo${y}_sol.pdf`
+          Sol: `https://www.apmo-official.org/static/solutions/apmo${y}_sol.pdf`,
         },
-        problems: [1,2,3,4,5].map((problem) => {
+        problems: [1, 2, 3, 4, 5].map((problem) => {
           return {
             index: problem,
           };
@@ -139,7 +195,7 @@ function getCompetitions(): Competition[] {
     }
 
     [2000, 1994, 1993, 1992, 1991, 1989].map((year) => {
-      delete get(apmo.years, "year", year).links.Sol
+      delete get(apmo.years, "year", year).links.Sol;
     });
 
     array.push(apmo);
