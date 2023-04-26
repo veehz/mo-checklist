@@ -1,6 +1,14 @@
-import '@/styles/globals.css'
-import type { AppProps } from 'next/app'
+import Analytics from "@/components/Analytics";
+import BackToTop from "@/components/BackToTop";
+import "@/styles/globals.css";
+import type { AppProps } from "next/app";
 
 export default function App({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />
+  return (
+    <>
+      <Analytics />
+      <BackToTop />
+      <Component {...pageProps} />
+    </>
+  );
 }

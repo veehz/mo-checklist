@@ -3,9 +3,7 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../firebase";
-import BackToTop from "./BackToTop";
 import Head from "next/head";
-import Analytics from "./Analytics";
 
 export default function Nav({
   pages = [
@@ -41,10 +39,7 @@ export default function Nav({
     <div>
       <Head>
         <title>{title ? title + " | MO Checklist" : "MO Checklist"}</title>
-        <Analytics />
       </Head>
-
-      <BackToTop />
 
       <nav className="bg-gray-800">
         <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
