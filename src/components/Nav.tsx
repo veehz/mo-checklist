@@ -14,10 +14,14 @@ export default function Nav({
     ["Settings", "/settings"],
   ],
   title,
+  description,
+  ogDescription,
 }: {
   pages?: Array<[string, string]>;
   rightPages?: Array<[string, string]>;
   title?: string;
+  description?: string;
+  ogDescription?: string;
 }) {
   const router = useRouter();
   const [user, setUser] = useState<any>(null);
@@ -39,6 +43,9 @@ export default function Nav({
     <div>
       <Head>
         <title>{title ? title + " | MO Checklist" : "MO Checklist"}</title>
+        <meta property="og:title" content={title ? title + " | MO Checklist" : "MO Checklist"} key="title" />
+        <meta name="description" content={description || "MO Checklist (MOCk) is a tool for keeping track of your progress in solving Mathematical Olympiad problems. Save your progress, filter by contests, and share with others!"} key="desc" />
+        <meta name="og:description" content={ogDescription || "With MO Checklist (MOCk), you can keep track of your progress in solving Mathematical Olympiad problems. Our comprehensive checklist allows you to mark problems as solved, unsolved, or unattempted, filter by contests, and view the most recent problems only. Log in to save your progress and share with others using a unique link to your profile. Start your MO journey today with MOCk!"} />
       </Head>
 
       <nav className="bg-gray-800">
