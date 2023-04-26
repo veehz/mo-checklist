@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "postbuild": "next-sitemap",
     "gh-pages": "npm run build && touch ./out/.nojekyll && node gh-pages.js",
     "start": "next start",
     "lint": "next lint"
@@ -20,6 +21,7 @@
     "eslint-config-next": "13.3.1",
     "firebase": "^9.20.0",
     "next": "13.3.1",
+    "next-sitemap": "^4.0.7",
     "postcss": "8.4.23",
     "react": "18.2.0",
     "react-dom": "18.2.0",
