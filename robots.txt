@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://veehz.github.io/mo-checklist
+
+# Sitemaps
+Sitemap: https://veehz.github.io/mo-checklist/sitemap.xml
