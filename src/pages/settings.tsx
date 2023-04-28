@@ -67,8 +67,12 @@ export default function App() {
       } = {};
 
       updates[`profile/${auth.currentUser!.uid}/displayName`] = data.name;
-      if(Number.isNaN(data.shownYears)) updates[`profile/${auth.currentUser!.uid}/shownYears`] = null;
-      else updates[`profile/${auth.currentUser!.uid}/shownYears`] = data.shownYears;
+      if (data.shownYears === undefined || Number.isNaN(data.shownYears))
+        updates[`profile/${auth.currentUser!.uid}/shownYears`] = null;
+      else
+        updates[`profile/${auth.currentUser!.uid}/shownYears`] =
+          data.shownYears;
+
       for (const c of competitions) {
         if (data.competitions.includes(c.shortname)) {
           if (
@@ -173,9 +177,7 @@ export default function App() {
         </div>
       ) : (
         <div className="pb-4 pt-2 px-12">
-          {message ? <div className="pb-4 text-center">
-            {message}
-          </div> : null}
+          {message ? <div className="pb-4 text-center">{message}</div> : null}
           <h2 className="font-bold text-2xl text-center">Profile</h2>
           <div className="text-sm">
             {errors?.name?.message ||
