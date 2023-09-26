@@ -57,7 +57,7 @@ function getCompetitions(): Competition[] {
       shortname: "IMO",
       url: "http://www.imo-official.org/",
       years: Array.from({ length: 2023 - 1959 + 1 }, (_, i) => {
-        const year = 2022 - i;
+        const year = 2023 - i;
         return {
           year,
           url: `https://www.imo-official.org/year_info.aspx?year=${year}`,
