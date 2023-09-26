@@ -56,7 +56,7 @@ function getCompetitions(): Competition[] {
       name: "International Mathematical Olympiad",
       shortname: "IMO",
       url: "http://www.imo-official.org/",
-      years: Array.from({ length: 2022 - 1959 + 1 }, (_, i) => {
+      years: Array.from({ length: 2023 - 1959 + 1 }, (_, i) => {
         const year = 2022 - i;
         return {
           year,
@@ -87,6 +87,11 @@ function getCompetitions(): Competition[] {
       }
       JSON.stringify({year: parseInt(document.getElementsByClassName("cmty-category-cell-title")[0].innerHTML.trim().split(" ")[0]), link: window.location.href, num: arr}) */
     const years = [
+      {
+        year: 2022,
+        link: "https://artofproblemsolving.com/community/c3381907_2022_imo_shortlist",
+        num: [8, 9, 8, 8],
+      },
       {
         year: 2021,
         link: "https://artofproblemsolving.com/community/c3080392_2021_isl",
@@ -195,7 +200,7 @@ function getCompetitions(): Competition[] {
       years: [],
     };
 
-    for (let y = 2022; y >= 1989; y--) {
+    for (let y = 2023; y >= 1989; y--) {
       apmo.years.push({
         year: y,
         url: `https://www.apmo-official.org/year_report/${y}`,
@@ -250,10 +255,10 @@ function getCompetitions(): Competition[] {
 
     get(egmo.years, "year", 2012).problems.push({
       index: 7,
-    })
+    });
     get(egmo.years, "year", 2012).problems.push({
       index: 8,
-    })
+    });
 
     array.push(egmo);
   })();
@@ -268,22 +273,64 @@ function getCompetitions(): Competition[] {
     };
 
     const first = 2008;
-    const links : [number, string][] = [
-      [2023, "https://artofproblemsolving.com/community/c3303738_2023_romanian_master_of_mathematics"],
-      [2021, "https://artofproblemsolving.com/community/c2510533_2021_romanian_masters_in_mathematics"],
-      [2020, "https://artofproblemsolving.com/community/c1085509_2020_romanian_masters_in_mathematics"],
-      [2019, "https://artofproblemsolving.com/community/c836819_2019_romanian_masters_in_mathematics"],
-      [2018, "https://artofproblemsolving.com/community/c618724_2018_romanian_masters_in_mathematics"],
-      [2017, "https://artofproblemsolving.com/community/c416676_2017_romanian_masters_in_mathematics"],
-      [2016, "https://artofproblemsolving.com/community/c254976_2016_romanian_masters_in_mathematic"],
-      [2015, "https://artofproblemsolving.com/community/c39512_2015_romania_masters_in_mathematics"],
-      [2013, "https://artofproblemsolving.com/community/c3612_2013_romanian_masters_in_mathematics"],
-      [2012, "https://artofproblemsolving.com/community/c3611_2012_romanian_masters_in_mathematics"],
-      [2011, "https://artofproblemsolving.com/community/c3610_2011_romanian_masters_in_mathematics"],
-      [2010, "https://artofproblemsolving.com/community/c3609_2010_romanian_masters_in_mathematics"],
-      [2009, "https://artofproblemsolving.com/community/c3608_2009_romanian_masters_in_mathematics"],
-      [2008, "https://artofproblemsolving.com/community/c3607_2008_romanian_masters_in_mathematics"],
-    ]
+    const links: [number, string][] = [
+      [
+        2023,
+        "https://artofproblemsolving.com/community/c3303738_2023_romanian_master_of_mathematics",
+      ],
+      [
+        2021,
+        "https://artofproblemsolving.com/community/c2510533_2021_romanian_masters_in_mathematics",
+      ],
+      [
+        2020,
+        "https://artofproblemsolving.com/community/c1085509_2020_romanian_masters_in_mathematics",
+      ],
+      [
+        2019,
+        "https://artofproblemsolving.com/community/c836819_2019_romanian_masters_in_mathematics",
+      ],
+      [
+        2018,
+        "https://artofproblemsolving.com/community/c618724_2018_romanian_masters_in_mathematics",
+      ],
+      [
+        2017,
+        "https://artofproblemsolving.com/community/c416676_2017_romanian_masters_in_mathematics",
+      ],
+      [
+        2016,
+        "https://artofproblemsolving.com/community/c254976_2016_romanian_masters_in_mathematic",
+      ],
+      [
+        2015,
+        "https://artofproblemsolving.com/community/c39512_2015_romania_masters_in_mathematics",
+      ],
+      [
+        2013,
+        "https://artofproblemsolving.com/community/c3612_2013_romanian_masters_in_mathematics",
+      ],
+      [
+        2012,
+        "https://artofproblemsolving.com/community/c3611_2012_romanian_masters_in_mathematics",
+      ],
+      [
+        2011,
+        "https://artofproblemsolving.com/community/c3610_2011_romanian_masters_in_mathematics",
+      ],
+      [
+        2010,
+        "https://artofproblemsolving.com/community/c3609_2010_romanian_masters_in_mathematics",
+      ],
+      [
+        2009,
+        "https://artofproblemsolving.com/community/c3608_2009_romanian_masters_in_mathematics",
+      ],
+      [
+        2008,
+        "https://artofproblemsolving.com/community/c3607_2008_romanian_masters_in_mathematics",
+      ],
+    ];
 
     for (let i = 0; i < links.length; i++) {
       const [y, url] = links[i];
@@ -294,8 +341,7 @@ function getCompetitions(): Competition[] {
           return {
             index: problem,
           };
-        }
-        ),
+        }),
       });
     }
 
@@ -306,7 +352,6 @@ function getCompetitions(): Competition[] {
 
     array.push(rmm);
   })();
-
 
   /** TOT */
   (function () {
