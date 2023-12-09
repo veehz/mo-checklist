@@ -428,6 +428,93 @@ function getCompetitions(): Competition[] {
 
     array.push(tot);
   })();
+
+  /* USAMO */
+  (function () {
+    const usamo: Competition = {
+      name: "United States of America Mathematical Olympiad",
+      shortname: "USAMO",
+      url: "https://artofproblemsolving.com/wiki/index.php/USAMO_Problems_and_Solutions",
+      years: [],
+    };
+
+    for (let y = 2023; y >= 1972; y--) {
+      usamo.years.push({
+        year: y,
+        url: `https://artofproblemsolving.com/wiki/index.php/${y}_USAMO`,
+        problems: [1, 2, 3, 4, 5, 6].map((problem) => {
+          return {
+            index: problem,
+            url: `https://artofproblemsolving.com/wiki/index.php/${y}_USAMO_Problems/Problem_${problem}`,
+          };
+        }),
+      });
+    }
+
+    array.push(usamo);
+  })();
+
+  /* USA TSTST */
+  (function () {
+    const usatst: Competition = {
+      name: "USA TST Selection Test",
+      shortname: "USATSTST",
+      url: "https://web.evanchen.cc/problems.html",
+      years: [],
+    };
+
+    for (let y = 2023; y >= 2011; y--) {
+      usatst.years.push({
+        year: y,
+        url: `https://web.evanchen.cc/exams/TSTST-${y}.pdf`,
+        problems: [1, 2, 3, 4, 5, 6].map((problem) => {
+          return {
+            index: problem,
+          };
+        }),
+      });
+    }
+
+    array.push(usatst);
+  })();
+
+  /* USA TST */
+  (function () {
+    const usatst: Competition = {
+      name: "USA TST",
+      shortname: "USATST",
+      url: "https://web.evanchen.cc/problems.html",
+      years: [],
+    };
+
+    for (let y = 2023; y >= 2012; y--) {
+      if (y in [2022]) continue;
+
+      usatst.years.push({
+        year: y,
+        url: `https://web.evanchen.cc/exams/IMO-${y}-TST.pdf`,
+        problems: [1, 2, 3, 4, 5, 6].map((problem) => {
+          return {
+            index: problem,
+          };
+        }),
+      });
+    }
+
+    for (let y = 2002; y >= 2000; y--) {
+      usatst.years.push({
+        year: y,
+        url: `https://web.evanchen.cc/exams/tse${String(y%100).padStart(2, "0")}.pdf`,
+        problems: [1, 2, 3, 4, 5, 6].map((problem) => {
+          return {
+            index: problem,
+          };
+        }),
+      });
+    }
+
+    array.push(usatst);
+  })();
   return array;
 }
 
