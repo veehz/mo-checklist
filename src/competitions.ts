@@ -56,8 +56,8 @@ function getCompetitions(): Competition[] {
       name: "International Mathematical Olympiad",
       shortname: "IMO",
       url: "http://www.imo-official.org/",
-      years: Array.from({ length: 2023 - 1959 + 1 }, (_, i) => {
-        const year = 2023 - i;
+      years: Array.from({ length: 2024 - 1959 + 1 }, (_, i) => {
+        const year = 2024 - i;
         return {
           year,
           url: `https://www.imo-official.org/year_info.aspx?year=${year}`,
@@ -87,6 +87,11 @@ function getCompetitions(): Competition[] {
       }
       JSON.stringify({year: parseInt(document.getElementsByClassName("cmty-category-cell-title")[0].innerHTML.trim().split(" ")[0]), link: window.location.href, num: arr}) */
     const years = [
+      {
+        year: 2023,
+        link: "https://artofproblemsolving.com/community/c3922196_2023_isl",
+        num: [7, 7, 8, 8],
+      },
       {
         year: 2022,
         link: "https://artofproblemsolving.com/community/c3381907_2022_imo_shortlist",
@@ -200,7 +205,7 @@ function getCompetitions(): Competition[] {
       years: [],
     };
 
-    for (let y = 2023; y >= 1989; y--) {
+    for (let y = 2024; y >= 1989; y--) {
       apmo.years.push({
         year: y,
         url: `https://www.apmo-official.org/year_report/${y}`,
@@ -233,7 +238,7 @@ function getCompetitions(): Competition[] {
     };
 
     const first = 2012;
-    for (let y = 2023; y >= first; y--) {
+    for (let y = 2024; y >= first; y--) {
       egmo.years.push({
         year: y,
         url: `https://www.egmo.org/egmos/egmo${y - first + 1}`,
@@ -274,6 +279,10 @@ function getCompetitions(): Competition[] {
 
     const first = 2008;
     const links: [number, string][] = [
+      [
+        2024,
+        "https://artofproblemsolving.com/community/c3771372_2024_romanian_master_of_mathematics",
+      ],
       [
         2023,
         "https://artofproblemsolving.com/community/c3303738_2023_romanian_master_of_mathematics",
@@ -363,7 +372,7 @@ function getCompetitions(): Competition[] {
     };
 
     const first = 1980;
-    for (let y = 2023; y >= 2016; y--) {
+    for (let y = 2024; y >= 2016; y--) {
       tot.years.push({
         name: `TOT Spring ${y}`,
         year: y,
@@ -438,7 +447,7 @@ function getCompetitions(): Competition[] {
       years: [],
     };
 
-    for (let y = 2023; y >= 1972; y--) {
+    for (let y = 2024; y >= 1972; y--) {
       usamo.years.push({
         year: y,
         url: `https://artofproblemsolving.com/wiki/index.php/${y}_USAMO`,
@@ -463,7 +472,19 @@ function getCompetitions(): Competition[] {
       years: [],
     };
 
-    for (let y = 2023; y >= 2011; y--) {
+    for (let y = 2024; y >= 2018; y--) {
+      usatst.years.push({
+        year: y,
+        url: `https://web.evanchen.cc/exams/TSTST-${y}.pdf`,
+        problems: [1, 2, 3, 4, 5, 6, 7, 8, 9].map((problem) => {
+          return {
+            index: problem,
+          };
+        }),
+      });
+    }
+
+    for (let y = 2017; y >= 2011; y--) {
       usatst.years.push({
         year: y,
         url: `https://web.evanchen.cc/exams/TSTST-${y}.pdf`,
@@ -487,8 +508,8 @@ function getCompetitions(): Competition[] {
       years: [],
     };
 
-    for (let y = 2023; y >= 2012; y--) {
-      if (y in [2022]) continue;
+    for (let y = 2024; y >= 2012; y--) {
+      if ([2022].includes(y)) continue;
 
       usatst.years.push({
         year: y,
@@ -504,7 +525,10 @@ function getCompetitions(): Competition[] {
     for (let y = 2002; y >= 2000; y--) {
       usatst.years.push({
         year: y,
-        url: `https://web.evanchen.cc/exams/tse${String(y%100).padStart(2, "0")}.pdf`,
+        url: `https://web.evanchen.cc/exams/tse${String(y % 100).padStart(
+          2,
+          "0"
+        )}.pdf`,
         problems: [1, 2, 3, 4, 5, 6].map((problem) => {
           return {
             index: problem,
