@@ -101,7 +101,7 @@ export default function App() {
     useState<string>("User");
 
   const [shareLink, setShareLink] = useState<string>("");
-  const [message, setMessage] = useState<string>("");
+  const [message, setMessage] = useState<React.ReactNode>("");
 
   const [originalData, setOriginalData] = useState<solvedStates>({});
 
@@ -287,7 +287,14 @@ export default function App() {
             : `My Checklist`}
         </h1>
         <div className="text-center mt-2">
-          {user ? null : <div><Link href="/login" className="text-blue-500">Sign in</Link> to save your progress on each question!</div>}
+          {user ? null : (
+            <div>
+              <Link href="/login" className="text-blue-500">
+                Sign in
+              </Link>{" "}
+              to save your progress on each question!
+            </div>
+          )}
           <div>{message}</div>
         </div>
         <div className="flex flex-col-reverse sm:flex-row-reverse mt-4">
@@ -354,7 +361,17 @@ export default function App() {
             <Button
               onClick={() => {
                 navigator.clipboard.writeText(shareLink);
-                setMessage("Copied to clipboard!");
+                setMessage(
+                  <div>
+                    Copied to clipboard!{" "}
+                    <Link
+                      className="underline text-blue-600 hover:text-blue-800 visited:text-purple-600"
+                      href={shareLink}
+                    >
+                      Link
+                    </Link>
+                  </div>
+                );
               }}
               className="bg-blue-600 mx-2 my-1 sm:my-0"
             >
@@ -393,7 +410,9 @@ export default function App() {
                           key={
                             year.name
                               ? `${year.name} ${year.description || ""}`
-                              : `${competition.shortname} ${year.year} ${year.description || ""}`
+                              : `${competition.shortname} ${year.year} ${
+                                  year.description || ""
+                                }`
                           }
                         >
                           <td
@@ -415,7 +434,9 @@ export default function App() {
                             >
                               {year.name
                                 ? `${year.name} ${year.description || ""}`
-                                : `${competition.shortname} ${year.year} ${year.description || ""}`}
+                                : `${competition.shortname} ${year.year} ${
+                                    year.description || ""
+                                  }`}
                             </Extlink>{" "}
                             {year.links ? (
                               <>
