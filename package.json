@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "postbuild": "next-sitemap",
-    "gh-pages": "npm run build && touch ./out/.nojekyll && node gh-pages.js",
+    "gh-pages": "npm run build && node gh-pages.js",
     "start": "next start",
     "lint": "next lint"
   },
