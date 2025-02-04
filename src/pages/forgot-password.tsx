@@ -70,7 +70,7 @@ export default function ForgotPassword() {
             onSubmit={handleSubmit(onSubmit)}
             noValidate
           >
-            <div className="-space-y-px rounded-md shadow-sm">
+            <div className="-space-y-px rounded-md shadow-xs">
               <div>
                 <label htmlFor="email-address" className="sr-only">
                   Email Address

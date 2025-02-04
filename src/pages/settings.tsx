@@ -254,7 +254,7 @@ export default function App() {
               onSubmit={handleSubmitPw(onSubmitPw)}
               noValidate
             >
-              <div className="-space-y-px rounded-md shadow-sm">
+              <div className="-space-y-px rounded-md shadow-xs">
                 <div>
                   <label htmlFor="oldPassword" className="sr-only">
                     Old Password

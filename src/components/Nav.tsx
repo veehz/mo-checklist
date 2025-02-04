@@ -55,7 +55,7 @@ export default function Nav({
               {/* <!-- Mobile menu button--> */}
               <button
                 type="button"
-                className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+                className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-hidden focus:ring-2 focus:ring-inset focus:ring-white"
                 aria-controls="mobile-menu"
                 aria-expanded="false"
                 onClick={() => setMenuOpen(!menuOpen)}
@@ -94,7 +94,7 @@ export default function Nav({
               </button>
             </div>
             <div className="flex flex-1 items-center justify-center md:items-stretch md:justify-start">
-              <div className="flex flex-shrink-0 items-center text-white font-bold text-2xl">
+              <div className="flex shrink-0 items-center text-white font-bold text-2xl">
                 <Link href="/">MO Checklist</Link>
               </div>
               <div className="hidden md:ml-6 md:block w-full">
