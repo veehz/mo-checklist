@@ -40,11 +40,8 @@ export default function App() {
         const errorCode = error.code;
         const errorMessage = error.message;
         switch (errorCode) {
-          case "auth/user-not-found":
-            setErrorMsg("User not found.");
-            break;
-          case "auth/wrong-password":
-            setErrorMsg("Incorrect password.");
+          case "auth/invalid-credentials":
+            setErrorMsg("Incorrect email or password.");
             break;
           case "auth/invalid-email":
             setErrorMsg("Invalid email address.");
